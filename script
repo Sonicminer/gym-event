@@ -2,8 +2,6 @@ getgenv().AutoArea = false
 getgenv().InfiniteGym = true
 getgenv().AutoUpgrade = true
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Sonicminer/gym-event/refs/heads/main/config", true))()
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local InstancingCmds = require(ReplicatedStorage.Library.Client.InstancingCmds)
 
