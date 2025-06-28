@@ -87,38 +87,6 @@ task.spawn(function()
     end
 end)
 
-task.spawn(function()
-    while true do
-        local inv = nil
-        for _, v in pairs(getgc(true)) do
-            if type(v) == "table" and rawget(v, "Inventory") and type(v.Inventory) == "table" then
-                inv = v.Inventory
-                break
-            end
-        end
-
-        local hugeSharkCount = 0
-        local titanicPiggyCount = 0
-
-        if inv and inv.Pet then
-            for _, data in pairs(inv.Pet) do
-                if typeof(data) == "table" then
-                    if tostring(data.id) == "Huge Gym Shark" then
-                        hugeSharkCount += 1
-                    elseif tostring(data.id) == "Titanic Gym Piggy" then
-                        titanicPiggyCount += 1
-                    end
-                end
-            end
-        end
-
-        getgenv().HugeGymSharkCount = hugeSharkCount
-        getgenv().TitanicGymPiggyCount = titanicPiggyCount
-
-        wait(5)
-    end
-end)
-
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
@@ -196,8 +164,6 @@ while true do
 		" Gift: " .. giftText ..
 		"  |   Huge: " .. hugeText ..
 		"\n   Titanic: " .. titanicText ..
-		"\n\n Huge Gym Shark: " .. tostring(getgenv().HugeGymSharkCount) ..
-		"\n   Titanic Gym Piggy: " .. tostring(getgenv().TitanicGymPiggyCount)
 
 	wait(1)
 end
