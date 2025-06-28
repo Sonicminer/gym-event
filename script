@@ -1,4 +1,4 @@
-getgenv().AutoArea = true
+getgenv().AutoArea = false
 getgenv().InfiniteGym = true
 getgenv().AutoUpgrade = true
 
@@ -25,7 +25,17 @@ local upgCooldown = 1
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Network = ReplicatedStorage:WaitForChild("Network")
 
-local Train = Network:WaitForChild("InfiniteGym_Train")
+local InfTrain = Network:WaitForChild("InfiniteGym_Train")
+local Train = Network:WaitForChild("Gym_Train")
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            InfTrain:InvokeServer("Squat")
+        end)
+        task.wait()
+    end
+end)
 
 task.spawn(function()
     while true do
