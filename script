@@ -1,4 +1,4 @@
-getgenv().AutoArea = true
+getgenv().AutoArea = false
 getgenv().InfiniteGym = true
 getgenv().AutoUpgrade = true
 
@@ -87,46 +87,91 @@ task.spawn(function()
     end
 end)
 
+task.spawn(function()
+    while true do
+        local inv = nil
+        for _, v in pairs(getgc(true)) do
+            if type(v) == "table" and rawget(v, "Inventory") and type(v.Inventory) == "table" then
+                inv = v.Inventory
+                break
+            end
+        end
+
+        local hugeSharkCount = 0
+        local titanicPiggyCount = 0
+
+        if inv and inv.Pet then
+            for _, data in pairs(inv.Pet) do
+                if typeof(data) == "table" then
+                    if tostring(data.id) == "Huge Gym Shark" then
+                        hugeSharkCount += 1
+                    elseif tostring(data.id) == "Titanic Gym Piggy" then
+                        titanicPiggyCount += 1
+                    end
+                end
+            end
+        end
+
+        getgenv().HugeGymSharkCount = hugeSharkCount
+        getgenv().TitanicGymPiggyCount = titanicPiggyCount
+
+        wait(5)
+    end
+end)
+
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
+-- Blende Chat und Playerlist oben aus
+local starterGui = game:GetService("StarterGui")
+starterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, false)
+starterGui:SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList, false)
+
 local gui = Instance.new("ScreenGui")
-gui.Name = "InfoDisplay"
+gui.Name = "FullscreenOverlay"
 gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true -- wichtig, damit es auch über Topbar & Chat geht!
 gui.Parent = playerGui
 
-local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 320, 0, 180)
-mainFrame.Position = UDim2.new(0, 20, 0, 20)
-mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-mainFrame.BorderSizePixel = 0
-mainFrame.Parent = gui
+local overlayFrame = Instance.new("Frame")
+overlayFrame.Size = UDim2.new(1, 0, 1, 0)
+overlayFrame.Position = UDim2.new(0, 0, 0, 0)
+overlayFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+overlayFrame.BackgroundTransparency = 0
+overlayFrame.BorderSizePixel = 0
+overlayFrame.Parent = gui
 
+-- Close-Button oben rechts
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 40, 0, 40)
+closeButton.Position = UDim2.new(1, -50, 0, 10)
+closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+closeButton.Text = "✖"
+closeButton.TextColor3 = Color3.new(1, 1, 1)
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 20
+closeButton.Parent = overlayFrame
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 10)
+corner.Parent = closeButton
+
+closeButton.MouseButton1Click:Connect(function()
+	overlayFrame.Visible = false
+end)
+
+-- Der Text in der Mitte
 local infoLabel = Instance.new("TextLabel")
-infoLabel.Size = UDim2.new(1, -40, 1, -20)
+infoLabel.Size = UDim2.new(1, -20, 1, -20)
 infoLabel.Position = UDim2.new(0, 10, 0, 10)
 infoLabel.BackgroundTransparency = 1
 infoLabel.TextColor3 = Color3.new(1, 1, 1)
-infoLabel.TextScaled = true
-infoLabel.Font = Enum.Font.SourceSansBold
-infoLabel.Text = "Lade..."
-infoLabel.TextXAlignment = Enum.TextXAlignment.Left
-infoLabel.TextYAlignment = Enum.TextYAlignment.Top
-infoLabel.Parent = mainFrame
-
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0, 30, 0, 30)
-closeButton.Position = UDim2.new(1, -35, 0, 5)
-closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-closeButton.Text = "X"
-closeButton.TextColor3 = Color3.new(1, 1, 1)
-closeButton.TextScaled = true
-closeButton.Font = Enum.Font.SourceSansBold
-closeButton.Parent = mainFrame
-
-closeButton.MouseButton1Click:Connect(function()
-	mainFrame.Visible = false
-end)
+infoLabel.TextWrapped = true
+infoLabel.TextXAlignment = Enum.TextXAlignment.Center
+infoLabel.TextYAlignment = Enum.TextYAlignment.Center
+infoLabel.Font = Enum.Font.Gotham
+infoLabel.TextSize = 26 -- anpassbar
+infoLabel.Parent = overlayFrame
 
 local function getTextSafe(path)
 	local success, value = pcall(function()
@@ -135,6 +180,7 @@ local function getTextSafe(path)
 	return success and value or "?"
 end
 
+-- Werte-Loop
 while true do
 	local rewards = playerGui:FindFirstChild("GymMain") and playerGui.GymMain:FindFirstChild("MuscleRaceRewards")
 
@@ -142,15 +188,16 @@ while true do
 	local gift = rewards and rewards:FindFirstChild("Gift")
 	local titanic = rewards and rewards:FindFirstChild("Titanic")
 
-	local roundText = getTextSafe(round or {})
 	local hugeText = getTextSafe((huge and huge:FindFirstChild("Progress")) or {})
 	local giftText = getTextSafe((gift and gift:FindFirstChild("Progress")) or {})
 	local titanicText = getTextSafe((titanic and titanic:FindFirstChild("Progress")) or {})
 
 	infoLabel.Text =
-		" Gift Reward: " .. giftText ..
-		"\n Huge Reward: " .. hugeText ..
-		"\n Titanic Reward: " .. titanicText
+		" Gift: " .. giftText ..
+		"  |   Huge: " .. hugeText ..
+		"\n   Titanic: " .. titanicText ..
+		"\n\n Huge Gym Shark: " .. tostring(getgenv().HugeGymSharkCount) ..
+		"\n   Titanic Gym Piggy: " .. tostring(getgenv().TitanicGymPiggyCount)
 
 	wait(1)
 end
