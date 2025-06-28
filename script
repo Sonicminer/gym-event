@@ -1,4 +1,4 @@
-getgenv().AutoArea = false
+getgenv().AutoArea = true
 getgenv().InfiniteGym = true
 getgenv().AutoUpgrade = true
 
