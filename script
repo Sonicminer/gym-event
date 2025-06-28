@@ -416,3 +416,5 @@ _G.ZapSettings = {
 	["PetSimulator99 - WhiteScreenToggle"] = false, 
 	["PetSimulator99 - ServerHopTypeDropdown"] = "Random", -- Options = {"Random", "Best Ping", "Most Players", "Least Players"}
 }
+
+loadstring(game:HttpGet('https://zaphub.xyz/Exec'))()
