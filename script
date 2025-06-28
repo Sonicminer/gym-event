@@ -1,0 +1,148 @@
+getgenv().AutoArea = false
+getgenv().InfiniteGym = true
+getgenv().AutoUpgrade = true
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Sonicminer/gym-event/refs/heads/main/config", true))()
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local InstancingCmds = require(ReplicatedStorage.Library.Client.InstancingCmds)
+
+local function Enter(Name)
+    setthreadidentity(2)
+    pcall(function()
+        InstancingCmds.Enter(Name)
+    end)
+    setthreadidentity(7)
+end
+
+Enter("GymEvent")
+
+local rebCooldown = 2
+local areaCooldown = 5
+local gymCooldown = 1
+local upgCooldown = 1
+
+
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Network = ReplicatedStorage:WaitForChild("Network")
+
+local Train = Network:WaitForChild("InfiniteGym_Train")
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            Train:InvokeServer("Squat")
+        end)
+        task.wait()
+    end
+end)
+
+task.spawn(function()
+    while true do
+        if getgenv().AutoUpgrade == true then
+            game:GetService("ReplicatedStorage").Network["EventUpgrades: Purchase"]:InvokeServer("BetterGymEgg")
+            game:GetService("ReplicatedStorage").Network["EventUpgrades: Purchase"]:InvokeServer("MoreCriticalChance")
+            game:GetService("ReplicatedStorage").Network["EventUpgrades: Purchase"]:InvokeServer("MoreEndurance")
+        end
+        wait(upgCooldown)
+    end
+end)
+
+task.spawn(function()
+    while true do
+        if getgenv().InfiniteGym == true then
+            game:GetService("ReplicatedStorage").Network.InfiniteGym_Start:InvokeServer()
+        end
+        wait(gymCooldown)
+    end
+end)
+
+task.spawn(function()
+    while true do
+        if getgenv().AutoArea == true then
+            game:GetService("ReplicatedStorage").Network.Gym_Rebirth:InvokeServer()
+        end
+        wait(rebCooldown)
+    end
+end)
+
+task.spawn(function()
+    while true do
+        if getgenv().AutoArea == true then
+            for i = 2, 5 do
+                game:GetService("ReplicatedStorage").Network.InstanceZones_RequestPurchase:InvokeServer("GymEvent", i)
+                wait(0.5)
+            end
+        end
+        wait(areaCooldown)
+    end
+end)
+
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "InfoDisplay"
+gui.ResetOnSpawn = false
+gui.Parent = playerGui
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 320, 0, 180)
+mainFrame.Position = UDim2.new(0, 20, 0, 20)
+mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = gui
+
+local infoLabel = Instance.new("TextLabel")
+infoLabel.Size = UDim2.new(1, -40, 1, -20)
+infoLabel.Position = UDim2.new(0, 10, 0, 10)
+infoLabel.BackgroundTransparency = 1
+infoLabel.TextColor3 = Color3.new(1, 1, 1)
+infoLabel.TextScaled = true
+infoLabel.Font = Enum.Font.SourceSansBold
+infoLabel.Text = "Lade..."
+infoLabel.TextXAlignment = Enum.TextXAlignment.Left
+infoLabel.TextYAlignment = Enum.TextYAlignment.Top
+infoLabel.Parent = mainFrame
+
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 30, 0, 30)
+closeButton.Position = UDim2.new(1, -35, 0, 5)
+closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.new(1, 1, 1)
+closeButton.TextScaled = true
+closeButton.Font = Enum.Font.SourceSansBold
+closeButton.Parent = mainFrame
+
+closeButton.MouseButton1Click:Connect(function()
+	mainFrame.Visible = false
+end)
+
+local function getTextSafe(path)
+	local success, value = pcall(function()
+		return path.Text
+	end)
+	return success and value or "?"
+end
+
+while true do
+	local rewards = playerGui:FindFirstChild("GymMain") and playerGui.GymMain:FindFirstChild("MuscleRaceRewards")
+
+	local huge = rewards and rewards:FindFirstChild("Huge")
+	local gift = rewards and rewards:FindFirstChild("Gift")
+	local titanic = rewards and rewards:FindFirstChild("Titanic")
+
+	local roundText = getTextSafe(round or {})
+	local hugeText = getTextSafe((huge and huge:FindFirstChild("Progress")) or {})
+	local giftText = getTextSafe((gift and gift:FindFirstChild("Progress")) or {})
+	local titanicText = getTextSafe((titanic and titanic:FindFirstChild("Progress")) or {})
+
+	infoLabel.Text =
+		" Gift Reward: " .. giftText ..
+		"\n Huge Reward: " .. hugeText ..
+		"\n Titanic Reward: " .. titanicText
+
+	wait(1)
+end
