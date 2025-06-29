@@ -87,6 +87,52 @@ task.spawn(function()
     end
 end)
 
+task.spawn(function()
+	while true do
+		local inv = nil
+		-- Inventar suchen
+		for i, v in pairs(getgc(true)) do
+			if type(v) == "table" and rawget(v, "Inventory") and type(v.Inventory) == "table" then
+				inv = v.Inventory
+				break
+			end
+		end
+
+		local gifts = 0
+		local huges = 0
+		local titanics = 0
+
+		if inv then
+			-- Gym Gifts zählen
+			if inv.Lootbox then
+				for uid, itemData in pairs(inv.Lootbox) do
+					if typeof(itemData) == "table" and itemData.id == "Gym Gift" then
+						local menge = itemData._am or 1
+						gifts += menge
+					end
+				end
+			end
+
+			-- Huges & Titanics zählen
+			if inv.Pet then
+				for uid, petData in pairs(inv.Pet) do
+					if typeof(petData) == "table" and petData.id == "Huge Gym Shark" then
+						huges += 1
+					elseif typeof(petData) == "table" and petData.id == "Titanic Gym Piggy" then
+						titanics += 1
+					end
+				end
+			end
+		end
+
+		getgenv().GiftGymCount = gifts
+		getgenv().HugeGymSharkCount = huges
+       		getgenv().TitanicGymPiggyCount = titanics
+
+		wait(5)
+	end
+end)
+
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
@@ -164,6 +210,9 @@ while true do
 		" Gift: " .. giftText ..
 		"  |   Huge: " .. hugeText ..
 		"\n   Titanic: " .. titanicText ..
+		"\n\n Gym Gift: " .. tostring(getgenv().GiftGymCount) ..
+		"\n Huge Gym Shark: " .. tostring(getgenv().HugeGymSharkCount) ..
+		"\n  Titanic Gym Piggy: " .. tostring(getgenv().TitanicGymPiggyCount)
 
 	wait(1)
 end
