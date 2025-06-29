@@ -1,40 +1,19 @@
---[[ Ask to ChatGPT or Deepseek if you need help with this --- Remember put this before the loadstring/script
-	Toggle: boolean (true or false)
-	Slider: number (3)
-	Dropdown: string ("Option 1")
-	MultiDropdown: table ({"Option 1", "Option 2"})
-	Input: string ("Hello")
-]]
-
-
-
---Pet Simulator 99!
 _G.ZapSettings = {
-	["PetSimulator99 - AutoTeleportToBestEventEggAreaToggle"] = false, 
-	["PetSimulator99 - AutoBuyNextEventAreaToggle"] = false, 
-	["PetSimulator99 - AutoBuyNearestEventEggToggle"] = false, 
-	["PetSimulator99 - AutoCompleteEventGateQuestToggle"] = false, 
-	["PetSimulator99 - AutoBuyUnitEggToggle"] = false, 
-	["PetSimulator99 - AutoFuseUnitsTableMultiDropdown"] = {}, -- Options = {"Safari Monkey", "Ninja Dalmatian", "Cyborg Kitsune", "Demolition Panda", "Flamethrower Spider", "Frostbyte Griffin", "Tech Samurai Axolotl", "Shadow Pegasus", "Torpedo Cat", "Comet Dragon", "Electric Eel", "Rich Corgi", "Forged Armadillo", "Arcade Angelus", "Nuclear Dominus", "Nightmare Cyclops", "TNT Capybara", "Zeus Bear", "Mechanical Griffin", "Detective Bunny", "Ronin Piggy", "Disco Ball Agony", "DJ Shark", "Knight Chicken", "Potion Penguin", "Old Wizard Cat", "Umbrella Elephant", "Ooze Dragon", "Abyssal Turtle", "Jetpack Cat", "Blurred Owl", "Crystal Giraffe", "Poseidon Axolotl", "Dino Corgi", "Pinata Dragon", "Arcade Meebo in a Spaceship", "Helicopter Corgi"}
-	["PetSimulator99 - AutoFuseUnitsToggle"] = false, 
-	["PetSimulator99 - AutoLoadNextLevelToggle"] = false, 
-	["PetSimulator99 - AutoLoadInfiniteLevelMapDropdown"] = "Happy Castle", -- Options = {"Happy Castle", "Twisted Beach", "Fantasy Farland", "Sakura Cliff", "Heaven Spiral"}
-	["PetSimulator99 - AutoLoadInfiniteLevelToggle"] = false, 
-	["PetSimulator99 - AutoReplayInfiniteRoundAmountSlider"] = 20, -- Range = {1, 100}
-	["PetSimulator99 - AutoReplayInfiniteRound"] = false, 
-	["PetSimulator99 - AutoLeaveWhenRoundFinishToggle"] = false, 
-	["PetSimulator99 - AutoStartCurrentRoundToggle"] = false, 
-	["PetSimulator99 - AutoSetRoundSpeedValueSlider"] = 1, -- Range = {1, 2}
-	["PetSimulator99 - AutoSetRoundSpeedToggle"] = false, 
-	["PetSimulator99 - AutoPlaceTowerDefenseTableMultiDropdown"] = {}, -- Options = {"Safari Monkey", "Ninja Dalmatian", "Cyborg Kitsune", "Demolition Panda", "Flamethrower Spider", "Frostbyte Griffin", "Tech Samurai Axolotl", "Shadow Pegasus", "Torpedo Cat", "Comet Dragon", "Electric Eel", "Rich Corgi", "Forged Armadillo", "Arcade Angelus", "Nuclear Dominus", "Nightmare Cyclops", "TNT Capybara", "Zeus Bear", "Mechanical Griffin", "Detective Bunny", "Ronin Piggy", "Disco Ball Agony", "DJ Shark", "Knight Chicken", "Potion Penguin", "Old Wizard Cat", "Umbrella Elephant", "Ooze Dragon", "Abyssal Turtle", "Jetpack Cat", "Blurred Owl", "Crystal Giraffe", "Poseidon Axolotl", "Dino Corgi", "Pinata Dragon", "Arcade Meebo in a Spaceship", "Helicopter Corgi"}
-	["PetSimulator99 - AutoPlaceTowerDefenseSortDrodpwon"] = "Cheaptest", -- Options = {"Cheaptest", "Most Expensive", "Highest Damage"}
-	["PetSimulator99 - AutoPlaceTowerDefenseModifieHotbarToggle"] = false, 
-	["PetSimulator99 - AutoPlaceTowerDefenseToggle"] = false, 
-	["PetSimulator99 - AutoUpgradeTowerDefenseToggle"] = false, 
-	["PetSimulator99 - RecordTowerDefenseMacroNameInput"] = false, 
-	["PetSimulator99 - RecordTowerDefenseMacroLinkInput"] = false, 
-	["PetSimulator99 - AutoPlayTowerDefenseMacroTypeDropdown"] = "ActualMacroTable1", -- Options not properly defined
-	["PetSimulator99 - AutoPlayTowerDefenseMacroToggle"] = false, 
+	["PetSimulator99 - AutoTeleportToBestEventEggAreaToggle"] = true, 
+	["PetSimulator99 - AutoBuyNextEventAreaToggle"] = true, 
+	["PetSimulator99 - AutoBuyNearestEventEggAmountSlider"] = 5, -- Range = {1, 5}
+	["PetSimulator99 - AutoBuyNearestEventEggToggle"] = true, 
+	["PetSimulator99 - AutoCompleteEventGateQuestToggle"] = true, 
+	["PetSimulator99 - AutoTeleportToBestEventEggToggle"] = true, 
+	["PetSimulator99 - AutoGymRebirthToggle"] = true, 
+	["PetSimulator99 - AutoGymTriningTypeDropdown"] = "Squat", -- Options = {"Squat", "Punch", "Pushup"}
+	["PetSimulator99 - AutoGymTriningModeDropdown"] = "Only Selected Training Type", -- Options = {"Only Selected Training Type", "Intelligent"}
+	["PetSimulator99 - AutoGymTriningToggle"] = true, 
+	["PetSimulator99 - AutoAdjustMuscleRaceSettingsTableMultiDropdown"] = {"Strength", "CritChance", "Stamina"}, -- Options = {"Strength", "CritChance", "Stamina"}
+	["PetSimulator99 - AutoAdjustMuscleRaceSettingsToggle"] = true, 
+	["PetSimulator99 - AutoStartMuscleRaceToggle"] = true, 
+	["PetSimulator99 - AutoBuyGymUpgradesTableMultiDropdown"] = {"Better Gym Egg", "More Critical Chance", "More Endurance"}, -- Options = {"Better Gym Egg", "More Critical Chance", "More Endurance"}
+	["PetSimulator99 - AutoBuyGymUpgradesToggle"] = true, 
 	["PetSimulator99 - AutoBuyNearestFishingEventEggLevelSlider"] = 40, -- Range = {1, 60}
 	["PetSimulator99 - AutoBuyNearestFishingEventEggToggle"] = false, 
 	["PetSimulator99 - AutoEventFishingIslandDrodpwon"] = "Recommended Island", -- Options = {"Recommended Island", "Island 1", "Island 2", "Island 3", "Island 4", "Island 5", "Island 6", "Actual Position"}
@@ -83,9 +62,9 @@ _G.ZapSettings = {
 	["PetSimulator99 - AutoMailPixelRainbowItemsToggle"] = false, 
 	["PetSimulator99 - NewGargantuanPetsWebhookInput"] = false, 
 	["PetSimulator99 - NewGargantuanPetsToggle"] = false, 
-	["PetSimulator99 - NewTitanicPetsWebhookInput"] = "https://discord.com/api/webhooks/1388511372156997769/T-cxafKCBtUereFXbuux7KUkQqYbt3ZlejfV5d9HCMC19zacx8ph3saM1zPLheNou2qC", 
+	["PetSimulator99 - NewTitanicPetsWebhookInput"] = getgenv().TitanicWebhook, 
 	["PetSimulator99 - NewTitanicPetsToggle"] = true, 
-	["PetSimulator99 - NewHugePetsWebhookInput"] = "https://discord.com/api/webhooks/1378681974809690112/XHchkhccnG6slakql7tvNJktoA-jOPFVgGxB0O7Q9mfW5eDWaM-NyB6TvMuSkEeGTuYG", 
+	["PetSimulator99 - NewHugePetsWebhookInput"] = getgenv().HugeWebhook, 
 	["PetSimulator99 - NewHugePetsToggle"] = true, 
 	["PetSimulator99 - NewExclusivePetsWebhookInput"] = false, 
 	["PetSimulator99 - NewExclusivePetsToggle"] = false, 
@@ -121,7 +100,7 @@ _G.ZapSettings = {
 	["PetSimulator99 - AutoBuyEggNameDropdown"] = "EggsTable1", -- Options not properly defined
 	["PetSimulator99 - AutoBuyEggTeleportToggle"] = false, 
 	["PetSimulator99 - AutoBuyEggToggle"] = false, 
-	["PetSimulator99 - DisableEggAnimationToggle"] = false, 
+	["PetSimulator99 - DisableEggAnimationToggle"] = true, 
 	["PetSimulator99 - AutoMakePetsGoldToggle"] = false, 
 	["PetSimulator99 - AutoMakePetsRainbowToggle"] = false, 
 	["PetSimulator99 - PetNameAutoFuseInput"] = false, 
