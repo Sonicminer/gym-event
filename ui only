@@ -47,6 +47,77 @@ end)
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
+-- Blende Chat und Playerlist oben aus
+local starterGui = game:GetService("StarterGui")
+starterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, false)
+starterGui:SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList, false)
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "FullscreenOverlay"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true -- wichtig, damit es auch über Topbar & Chat geht!
+gui.Parent = playerGui
+
+local overlayFrame = Instance.new("Frame")
+overlayFrame.Size = UDim2.new(1, 0, 1, 0)
+overlayFrame.Position = UDim2.new(0, 0, 0, 0)
+overlayFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+overlayFrame.BackgroundTransparency = 0
+overlayFrame.BorderSizePixel = 0
+overlayFrame.Parent = gui
+
+-- Close-Button oben rechts
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 40, 0, 40)
+closeButton.Position = UDim2.new(1, -50, 0, 10)
+closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+closeButton.Text = "✖"
+closeButton.TextColor3 = Color3.new(1, 1, 1)
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 20
+closeButton.Parent = overlayFrame
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 10)
+corner.Parent = closeButton
+
+closeButton.MouseButton1Click:Connect(function()
+	overlayFrame.Visible = false
+end)
+
+-- Der Text in der Mitte
+local infoLabel = Instance.new("TextLabel")
+infoLabel.Size = UDim2.new(1, -20, 1, -20)
+infoLabel.Position = UDim2.new(0, 10, 0, 10)
+infoLabel.BackgroundTransparency = 1
+infoLabel.TextColor3 = Color3.new(1, 1, 1)
+infoLabel.TextWrapped = true
+infoLabel.TextXAlignment = Enum.TextXAlignment.Center
+infoLabel.TextYAlignment = Enum.TextYAlignment.Center
+infoLabel.Font = Enum.Font.Gotham
+infoLabel.TextSize = 26 -- anpassbar
+infoLabel.Parent = overlayFrame
+
+local function getTextSafe(path)
+	local success, value = pcall(function()
+		return path.Text
+	end)
+	return success and value or "?"
+end
+
+-- Werte-Loop
+while true do
+	local rewards = playerGui:FindFirstChild("GymMain") and playerGui.GymMain:FindFirstChild("MuscleRaceRewards")
+
+	local huge = rewards and rewards:FindFirstChild("Huge")
+	local gift = rewards and rewards:FindFirstChild("Gift")
+	local titanic = rewards and rewards:FindFirstChild("Titanic")
+
+	local hugeText = getTextSafe((huge and huge:FindFirstChild("Progress")) or {})
+	local giftText = getTextSafe((gift and gift:FindFirstChild("Progress")) or {})
+	local titanicText = getTextSafe((titanic and titanic:FindFirstChild("Progress")) or {})
+
+	infoLabel.Text =
 		" Gift: " .. giftText ..
 		"  |   Huge: " .. hugeText ..
 		"\n   Titanic: " .. titanicText ..
